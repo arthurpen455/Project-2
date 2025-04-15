@@ -1,100 +1,363 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Peserta Didik</title>
-    <style type="text/css" media="all">
+    <title>info</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Roboto:wght@400&display=swap');
+
+        :root {
+            --bg-color: #1a1a2e;
+            --card-bg: #2a2a3e;
+            --text-color: #e0e0e0;
+            --accent-color-1: #00f2fe;
+            --accent-color-2: #ff7e5f;
+            --accent-color-3: #feb47b;
+            --confetti-color-4: #a071f8;
+            --confetti-color-5: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-background-image: url("buku.jpg");
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
 
-.container {
-    width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        .scene {
+            perspective: 1200px;
+            width: 320px;
+            height: 420px;
+        }
 
-h1 {
-    text-align: center;
-}
+        .card {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--card-bg), #3a3a5e);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
 
-label {
-    display: block;
-    margin: 10px 0 5px;
-}
+        .scene:hover .card {
+            transform: rotateY(7deg) rotateX(3deg) translateZ(25px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
+        }
 
-input, textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+        .number-container {
+            display: flex;
+            margin-bottom: 20px;
+            transform: translateZ(60px);
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+        }
 
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+        .digit-wrapper {
+            transform-style: preserve-3d;
+            opacity: 0;
+            animation: revealDigit 1.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
 
-button:hover {
-    background-color: #218838;
-}
+        .digit-wrapper:nth-child(1) { animation-delay: 0.2s; }
+        .digit-wrapper:nth-child(2) { animation-delay: 0.4s; }
+        .digit-wrapper:nth-child(3) { animation-delay: 0.6s; }
 
-#message {
-    margin-top: 20px;
-    text-align: center;
-}
+        .digit {
+            font-family: 'Poppins', sans-serif;
+            font-size: 7rem;
+            font-weight: 900;
+            line-height: 1;
+            display: inline-block;
+            text-shadow:
+                1px 1px 0px var(--shadow-color),
+                2px 2px 0px var(--shadow-color),
+                3px 3px 0px var(--shadow-color),
+                4px 4px 0px var(--shadow-color),
+                5px 5px 0px var(--shadow-color),
+                6px 6px 0px var(--shadow-color);
+        }
+
+        .digit-1 { color: var(--accent-color-1); }
+        .digit-0a { color: var(--accent-color-2); }
+        .digit-0b { color: var(--accent-color-3); }
+
+        @keyframes revealDigit {
+            0% {
+                opacity: 0;
+                transform: rotateY(120deg) rotateX(60deg) scale(0.4) translateX(-80px) translateZ(-150px);
+            }
+            60% {
+                 opacity: 0.9;
+                 transform: rotateY(-10deg) rotateX(-5deg) scale(1.1) translateX(10px) translateZ(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: rotateY(0deg) rotateX(0deg) scale(1) translateX(0px) translateZ(0px);
+            }
+        }
+
+        .message {
+            opacity: 0;
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+            animation: revealMessage3D 1s ease-out forwards;
+            animation-delay: 1.5s;
+        }
+
+        .message h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--accent-color-1);
+            margin-bottom: 5px;
+        }
+
+        .message p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        @keyframes revealMessage3D {
+            from {
+                opacity: 0;
+                transform: rotateX(-45deg) translateY(30px) translateZ(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: rotateX(0deg) translateY(0) translateZ(30px);
+            }
+        }
+
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+            transform-style: preserve-3d;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 14px;
+            background-color: var(--accent-color-1);
+            opacity: 0;
+            transform: translateY(-20px) rotateZ(0deg) rotateX(0deg);
+        }
+
+        .confetti-c1 { background-color: var(--accent-color-1); }
+        .confetti-c2 { background-color: var(--accent-color-2); }
+        .confetti-c3 { background-color: var(--accent-color-3); }
+        .confetti-c4 { background-color: var(--confetti-color-4); }
+        .confetti-c5 { background-color: var(--confetti-color-5); }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-5vh) rotateZ(0deg) rotateX(0deg) rotateY(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotateZ(720deg) rotateX(360deg) rotateY(180deg);
+                opacity: 0;
+            }
+        }
+
+        .language-toggle-button {
+            position: fixed; 
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            background-color: rgba(42, 42, 62, 0.8);       
+            color: var(--text-color);
+            border: 1px solid var(--accent-color-1);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Roboto', sans-serif;
+            z-index: 100; 
+            display: none; 
+            opacity: 0.8;
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+        }
+        .language-toggle-button:hover {
+          opacity: 1;
+          background-color: rgba(60, 60, 90, 0.9);
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Pendaftaran Peserta Didik</h1>
-        <form id="registrationForm">
-            <label for="name">Nama Lengkap:</label>
-            <input type="text" id="name" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" required>
-            <label for="Nomor">NISN:</label>
-            <input type="number" id="name" required
 
+<!-- Add the button here, outside the main scene -->
+<button id="switchToEnglishBtn" class="language-toggle-button">View in English</button>
 
-            <label for="phone">Nomor Telepon:</label>
-            <input type="tel" id="phone" required>
-
-            <label for="address">Alamat:</label>
-            <textarea id="address" required></textarea>
-
-            <button type="submit">Daftar</button>
-        </form>
-        <div id="message"></div>
+<div class="scene">
+    <div class="card">
+        <div class="confetti-container"></div>
+        <div class="number-container">
+            <div class="digit-wrapper">
+                <span class="digit digit-1">h</span>
+            </div>
+            <div class="digit-wrapper">
+                <span class="digit digit-0a">l</span>
+            </div>
+            <div class="digit-wrapper">
+                <span class="digit digit-0b">o</span>
+            </div>
+        </div>
+        <div class="message">
+            <h2 id="message-title"></h2>
+            <p id="message-body">halo semua kalian kenal aku kan admin paling baik
+            sedunia♥️<br><br>cuman mo kasi info kalok rimles bisa di gunakan tanggal 20 mei😎</p>
+        </div>
     </div>
-    <script>document.getElementById('registrationForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Mencegah pengiriman form
+</div>
 
-    // Mengambil nilai dari input
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const address = document.getElementById('address').value;
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const confettiContainer = document.querySelector('.confetti-container');
+        const confettiCount = 60;
+        const colors = ['c1', 'c2', 'c3', 'c4', 'c5'];
 
-    // Menampilkan pesan sukses
-    const messageDiv = document.getElementById('message');
-    messageDiv.innerHTML = `<p>Terima kasih, ${name}! Pendaftaran Anda berhasil.</p>`;
+        const messageTitleElement = document.getElementById('message-title');
+        const messageBodyElement = document.getElementById('message-body');
+        const switchToEnglishBtn = document.getElementById('switchToEnglishBtn'); 
 
-    // Reset form
-    document.getElementById('registrationForm').reset();
-});</script>
+        const originalTitle = messageTitleElement.innerText;
+        const originalBody = messageBodyElement.innerHTML;
+
+        function translateText(text, targetLang, element) {
+            if (!text || !targetLang || targetLang === 'en') {
+                return Promise.resolve(false); 
+            }
+
+            const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`;
+
+            return fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.responseStatus === 200 && data.responseData?.translatedText) {
+                        if (element === messageBodyElement) {
+                           element.innerHTML = data.responseData.translatedText;
+                        } else {
+                           element.innerText = data.responseData.translatedText;
+                        }
+                        
+                        return true; 
+                    } else {
+                        console.warn(`Translation failed: ${data.responseDetails || 'Unknown error'}. Status: ${data.responseStatus}`);
+                        return false; 
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching translation:', error);
+                    return false; 
+                });
+        }
+
+        function showEnglishButton() {
+            if (switchToEnglishBtn) {
+                switchToEnglishBtn.style.display = 'block';
+            }
+        }
+
+        function getUserLocationAndTranslate() {
+            fetch('https://api.codetabs.com/v1/geolocation/json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Geolocation API failed with status ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const countryCode = data.country_code;
+                   
+
+                    if (countryCode) {
+                        const targetLang = countryCode.toLowerCase();
+
+                        if (targetLang !== 'en') {
+                            
+                          
+                            Promise.all([
+                                translateText(originalTitle, targetLang, messageTitleElement),
+                                translateText(originalBody, targetLang, messageBodyElement)
+                            ]).then(results => {
+                               
+                                if (results.some(success => success === true)) {
+                                    showEnglishButton(); 
+                                }
+                            });
+                        } else {
+                            console.log("Detected language is English. No translation needed.");
+                        }
+
+                    } else {
+                         console.log("Could not determine country code from CodeTabs API, defaulting to English.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching geolocation from CodeTabs:', error);
+                    console.log("CodeTabs Geolocation failed, defaulting to English.");
+                });
+        }
+
+      
+        if (switchToEnglishBtn) {
+            switchToEnglishBtn.addEventListener('click', () => {
+                
+                messageTitleElement.innerText = originalTitle;
+                messageBodyElement.innerHTML = originalBody;
+                switchToEnglishBtn.style.display = 'none'; 
+            });
+        }
+
+       
+        getUserLocationAndTranslate();
+
+        setTimeout(() => {
+            for (let i = 0; i < confettiCount; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.classList.add('confetti-piece');
+                confettiPiece.classList.add(colors[Math.floor(Math.random() * colors.length)]);
+                confettiPiece.style.left = `${Math.random() * 100}%`;
+                const animDuration = Math.random() * 3 + 3;
+                const animDelay = Math.random() * 4;
+                confettiPiece.style.animation = `fall ${animDuration}s linear ${animDelay}s infinite`;
+                confettiContainer.appendChild(confettiPiece);
+            }
+        }, 1200);
+    });
+</script>
+
 </body>
 </html>
